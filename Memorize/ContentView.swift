@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-	var emojis = ["🚂", "🚀", "🚁", "🚜", "🚗", "🛵", "🛻", "🚔"]
-	@State var emojiCount = 4
+	@State var emojis = ["🚂", "🚀", "🚁", "🚜", "🚗", "🛵", "🛻", "🚔"].shuffled()
 	
 	var body: some View {
 		VStack {
+			Text("Memorize!").font(.largeTitle)
 			ScrollView {
 				LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-					ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
+					ForEach(emojis[0..<emojis.count], id: \.self) { emoji in
 						CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
 					}
 				}
@@ -23,33 +23,38 @@ struct ContentView: View {
 			}
 			Spacer()
 			HStack {
-				remove
 				Spacer()
-				add
+				ThemeButton(buttonImage: "car", theme: "Vehicles") {
+					self.emojis = ["🚂", "🚀", "🚁", "🚜", "🚗", "🛵", "🛻", "🚔"].shuffled()
+				}
+				Spacer()
+				ThemeButton(buttonImage: "sportscourt", theme: "Sports") {
+					self.emojis = ["⚽️","🏀","🏈","⚾️","🎱","🥊","🥏","🛹","🥌"].shuffled()
+				}
+				Spacer()
+				ThemeButton(buttonImage: "face.smiling", theme: "Faces") {
+					self.emojis = ["😀","🤣","😉","😚","🧐","😒","😡","🥵","🥳"].shuffled()
+				}
+				Spacer()
 			}
-			.font(.largeTitle)
-			.padding(.horizontal)
 		}
 		.padding(.horizontal)
 	}
+}
+
+struct ThemeButton: View {
+	let buttonImage: String
+	let theme: String
+	let action: () -> (Void)
 	
-	var remove: some View {
+	var body: some View {
 		Button {
-			if emojiCount > 1 {
-				emojiCount -= 1
-			}
+			action()
 		} label: {
-			Image(systemName: "minus.circle")
-		}
-	}
-	
-	var add: some View {
-		Button {
-			if emojiCount < emojis.count {
-				emojiCount += 1
+			VStack {
+				Image(systemName: buttonImage).font(.largeTitle)
+				Text(theme).font(.caption)
 			}
-		} label: {
-			Image(systemName: "plus.circle")
 		}
 	}
 }
