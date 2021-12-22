@@ -14,8 +14,9 @@ struct ContentView: View {
 		VStack {
 			Text("Memorize!").font(.largeTitle)
 			ScrollView {
-				LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-					ForEach(emojis[0..<emojis.count], id: \.self) { emoji in
+				let randomNumberOfCards = Int.random(in: 4...emojis.count)
+				LazyVGrid(columns: [GridItem(.adaptive(minimum: widthThatBestFits(cardCount: randomNumberOfCards)))]) {
+					ForEach(emojis[0..<randomNumberOfCards], id: \.self) { emoji in
 						CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
 					}
 				}
@@ -39,6 +40,14 @@ struct ContentView: View {
 			}
 		}
 		.padding(.horizontal)
+	}
+	
+	func widthThatBestFits(cardCount: Int) -> CGFloat {
+		switch cardCount {
+		case 4: return 150
+		case 5..<10: return 100
+		default: return 65
+		}
 	}
 }
 
