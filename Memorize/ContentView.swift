@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
 	var emojis = ["🚂", "🚀", "🚁", "🚜", "🚗", "🛵", "🛻", "🚔"]
-	@State var emojiCount = 4
+	@State var emojiCount = 8
 	
 	var body: some View {
 		VStack {
@@ -19,39 +19,12 @@ struct ContentView: View {
 						CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
 					}
 				}
-				.foregroundColor(.red)
 			}
-			Spacer()
-			HStack {
-				remove
-				Spacer()
-				add
-			}
-			.font(.largeTitle)
-			.padding(.horizontal)
+			.foregroundColor(.red)
 		}
 		.padding(.horizontal)
 	}
 	
-	var remove: some View {
-		Button {
-			if emojiCount > 1 {
-				emojiCount -= 1
-			}
-		} label: {
-			Image(systemName: "minus.circle")
-		}
-	}
-	
-	var add: some View {
-		Button {
-			if emojiCount < emojis.count {
-				emojiCount += 1
-			}
-		} label: {
-			Image(systemName: "plus.circle")
-		}
-	}
 }
 
 struct CardView: View {
