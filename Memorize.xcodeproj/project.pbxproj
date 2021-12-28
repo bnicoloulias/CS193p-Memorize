@@ -57,8 +57,8 @@
 			children = (
 				A079DAD227741DDE0073C394 /* ViewModels */,
 				A079DACF27741DB70073C394 /* Models */,
-				A0184A1427570B830036B475 /* MemorizeApp.swift */,
-				A0184A1627570B830036B475 /* ContentView.swift */,
+				A079DAD42774F46F0073C394 /* App */,
+				A079DAD32774F3ED0073C394 /* Views */,
 				A0184A1827570B850036B475 /* Assets.xcassets */,
 				A0184A1A27570B850036B475 /* Preview Content */,
 			);
@@ -87,6 +87,22 @@
 				A079DAD027741DDA0073C394 /* EmojiMemoryGame.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A079DAD32774F3ED0073C394 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A0184A1627570B830036B475 /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A079DAD42774F46F0073C394 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A0184A1427570B830036B475 /* MemorizeApp.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
