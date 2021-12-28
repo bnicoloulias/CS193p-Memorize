@@ -13,6 +13,8 @@ import Foundation
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
 	private(set) var cards: Array<Card>
+	private var seenCards: [Card] = []
+	private(set) var score: Int = 0
 	
 	private var indexOfTheOneAndOnlyFaceUpCard: Int?
 	
@@ -25,6 +27,15 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
 				if cards[chosenIndex].content == cards[potentialMatchIndex].content {
 					cards[chosenIndex].isMatched = true
 					cards[potentialMatchIndex].isMatched = true
+					score += 2
+				} else {
+					for card in seenCards {
+						if card.id == cards[chosenIndex].id || card.id == cards[potentialMatchIndex].id {
+							score -= 1
+						}
+					}
+					seenCards.append(cards[chosenIndex])
+					seenCards.append(cards[potentialMatchIndex])
 				}
 				indexOfTheOneAndOnlyFaceUpCard = nil
 			} else {
@@ -35,16 +46,23 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
 			}
 			cards[chosenIndex].isFaceUp.toggle()
 		}
-		print("\(cards)")
+		//print("\(cards)")
+		//print(seenCards)
 	}
 	
 	init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
 		cards = Array<Card>()
 		for pairIndex in 0..<numberOfPairsOfCards {
 			let content: CardContent = createCardContent(pairIndex)
-			cards.append(Card(content: content, id: pairIndex*2))
-			cards.append(Card(content: content, id: pairIndex*2+1))
+			// Check to see if CardContent has already been used
+			if !cards.contains(where: { $0.content == content }) {
+				cards.append(Card(content: content, id: pairIndex*2))
+				cards.append(Card(content: content, id: pairIndex*2+1))
+			} else {
+				print("CardContet \(content) already used")
+			}
 		}
+		cards = cards.shuffled()
 	}
 	
 	struct Card: Identifiable {
