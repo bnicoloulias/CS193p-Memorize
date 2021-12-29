@@ -18,7 +18,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
 	
 	private var indexOfTheOneAndOnlyFaceUpCard: Int?
 	
-	mutating func choose(_ card: Card) {
+	mutating func choose(_ card: Card, startTimer: () -> Void, endTimer: () -> Double) {
 		if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }),
 			!cards[chosenIndex].isFaceUp,
 			!cards[chosenIndex].isMatched
@@ -27,7 +27,9 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
 				if cards[chosenIndex].content == cards[potentialMatchIndex].content {
 					cards[chosenIndex].isMatched = true
 					cards[potentialMatchIndex].isMatched = true
-					score += 2
+					let secondsElapsed = endTimer()
+					let scoreBonus = Int(max(10 - secondsElapsed, 2))
+					score += scoreBonus
 				} else {
 					for card in seenCards {
 						if card.id == cards[chosenIndex].id || card.id == cards[potentialMatchIndex].id {
@@ -43,6 +45,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
 					cards[index].isFaceUp = false
 				}
 				indexOfTheOneAndOnlyFaceUpCard = chosenIndex
+				startTimer()
 			}
 			cards[chosenIndex].isFaceUp.toggle()
 		}
