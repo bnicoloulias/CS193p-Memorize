@@ -11,20 +11,34 @@ struct EmojiMemoryGameView: View {
 	@ObservedObject var game: EmojiMemoryGame
 	
 	var body: some View {
-		ScrollView {
-			LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-				ForEach(game.cards) { card in
-					CardView(card: card)
-						.aspectRatio(2/3, contentMode: .fit)
-						.onTapGesture {
-							game.chooseCard(card)
-						}
-				}
+		AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+			if card.isMatched && !card.isFaceUp {
+				Rectangle().opacity(0)
+			} else {
+				CardView(card: card)
+					.padding(4)
+					.onTapGesture {
+						game.chooseCard(card)
+					}
 			}
 		}
 		.foregroundColor(.red)
 		.padding(.horizontal)
 	}
+	
+//	@ViewBuilder
+//	private func cardView(for card: EmojiMemoryGame.Card) -> some View {
+//		if card.isMatched && !card.isFaceUp {
+//			Rectangle().opacity(0)
+//		} else {
+//			CardView(card: card)
+//				.padding(4)
+//				.onTapGesture {
+//					game.chooseCard(card)
+//				}
+//		}
+//	}
+	
 }
 
 struct CardView: View {
@@ -37,6 +51,10 @@ struct CardView: View {
 				if card.isFaceUp {
 					shape.fill().foregroundColor(.white)
 					shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
+//					Pie(startAngle: Angle(radians: 3 * Double.pi / 2), endAngle: Angle(radians: Double.pi))
+					Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90))
+						.padding(DrawingConstants.circlePadding)
+						.opacity(DrawingConstants.circleOpacity)
 					Text(card.content).font(font(in: geometry.size))
 				} else if card.isMatched {
 					shape.opacity(DrawingConstants.zeroOpacity)
@@ -52,10 +70,12 @@ struct CardView: View {
 	}
 	
 	private struct DrawingConstants {
-		static let cornerRadius: CGFloat = 20
+		static let cornerRadius: CGFloat = 10
 		static let lineWidth: CGFloat = 3
-		static let fontScale: CGFloat = 0.8
+		static let fontScale: CGFloat = 0.70
 		static let zeroOpacity: Double = 0
+		static let circleOpacity: Double = 0.5
+		static let circlePadding: CGFloat = 5
 	}
 }
 
@@ -63,9 +83,8 @@ struct CardView: View {
 struct EmojiMemoryGameView_Previews: PreviewProvider {
 	static var previews: some View {
 		let game = EmojiMemoryGame()
-		EmojiMemoryGameView(game: game)
-			.preferredColorScheme(.dark)
-		EmojiMemoryGameView(game: game)
+		game.chooseCard(game.cards.first!)
+		return EmojiMemoryGameView(game: game)
 			.preferredColorScheme(.light)
 	}
 }
